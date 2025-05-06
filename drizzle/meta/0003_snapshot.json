@@ -1,0 +1,112 @@
+{
+  "id": "a5d631c5-767a-48ce-851a-9e44a9d944e9",
+  "prevId": "37684a39-034a-40be-b38e-1d811cb82fed",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.aiGeneratedImage": {
+      "name": "aiGeneratedImage",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "roomType": {
+          "name": "roomType",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "designType": {
+          "name": "designType",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "orgImage": {
+          "name": "orgImage",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aiImage": {
+          "name": "aiImage",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userEmail": {
+          "name": "userEmail",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "imageUrl": {
+          "name": "imageUrl",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "credits": {
+          "name": "credits",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 3
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
