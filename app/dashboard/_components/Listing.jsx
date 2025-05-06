@@ -123,6 +123,7 @@ import { AiGeneratedImage } from '@/config/schema';
 import { eq } from 'drizzle-orm';
 import RoomDesignCard from './RoomDesignCard';
 import { useRouter } from 'next/navigation';
+import EmptyState from './EmptyState';
 
 function Listing() {
   const { user } = useUser();

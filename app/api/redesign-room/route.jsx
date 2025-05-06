@@ -83,7 +83,7 @@
 
 //     // Using test image instead
 //     const output = "https://replicate.delivery/xezq/ZBY9lfmoBLW7P6WeZ59etsPJfKUlWHuXPUyUJ3UFcCtLwcBSB/out.png";
-    
+
 
 
 //     const base64Image = await ConvertImageToBase64(output);
@@ -154,7 +154,9 @@ async function saveImageToCloudinary(base64Image, fileName = Date.now(), quality
   uploadFormData.append("upload_preset", config.uploadPreset);
   uploadFormData.append("public_id", fileName);
   uploadFormData.append("folder", "decormind");
-  uploadFormData.append("quality", quality); // Adjust image quality
+  uploadFormData.append("quality", 100); // Adjust image quality
+  uploadFormData.append("format", "webp"); // WebP retains quality better than PNG
+  uploadFormData.append("fetch_format", "auto");
 
   try {
     console.log(`⏳ Uploading image to Cloudinary with quality: ${quality}...`);
