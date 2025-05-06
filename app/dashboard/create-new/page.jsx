@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback,useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import ImageSelection from "./_components/ImageSelection";
 import RoomType from "./_components/RoomType";
 import DesignType from "./_components/DesignType";
@@ -14,21 +14,22 @@ import AiOutputDialog from "../_components/AiOutputDialog";
 import { db } from "@/config/db";
 import { Users } from "@/config/schema";
 import { UserDetailContext } from "@/app/_context/UserDetailContext";
-
+import Link from "next/link";
+import { Home } from "lucide-react";
 
 function CreateNew() {
-  const {user}=useUser();
+  const { user } = useUser();
   const [formData, setFormData] = useState({});
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [aiGeneratedImageUrl, setAiGeneratedImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   // const [outputResult, setOutputResult]= useState();
-  const [aiOutputImage,setAiOutputImage]=useState();
-  const [openOutputDialog,setOpenOutputDialog]=useState(false);
-  const[orgImage,setOrgImage]=useState();
+  const [aiOutputImage, setAiOutputImage] = useState();
+  const [openOutputDialog, setOpenOutputDialog] = useState(false);
+  const [orgImage, setOrgImage] = useState();
 
-  const {userDetail, setUserDetail}= useContext(UserDetailContext);
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
 
   const onHandleInputChange = useCallback((value, fieldName) => {
     setFormData((prev) => ({ ...prev, [fieldName]: value || "" }));
@@ -92,43 +93,43 @@ function CreateNew() {
       setLoading(false);
     }
   };
-  const generateAiImage= async()=>{
+  const generateAiImage = async () => {
     setLoading(true);
-    const rawImageUrl=await saveImageToCloudinary();
+    const rawImageUrl = await saveImageToCloudinary();
     const result = await axios.post(
-            "/api/redesign-room",
-            {
-              imageUrl:rawImageUrl,
-              roomType:formData?.roomType,
-              designType:formData?.designType,
-              additionalReq:formData?.additionalReq,
-              userEmail:user?.primaryEmailAddress?.emailAddress
-            });
-            console.log(result.data);
-            await updateUserCredits();
-            setAiOutputImage(result.data.result);
-            setOpenOutputDialog(true);
-            await updateUserCredits();
-            setLoading(false);
+      "/api/redesign-room",
+      {
+        imageUrl: rawImageUrl,
+        roomType: formData?.roomType,
+        designType: formData?.designType,
+        additionalReq: formData?.additionalReq,
+        userEmail: user?.primaryEmailAddress?.emailAddress
+      });
+    console.log(result.data);
+    await updateUserCredits();
+    setAiOutputImage(result.data.result);
+    setOpenOutputDialog(true);
+    await updateUserCredits();
+    setLoading(false);
 
-            
+
 
 
   }
-  const updateUserCredits=async ()=>{
-    const result=await db.update(Users).set({
-      credits:userDetail?.credits-1
+  const updateUserCredits = async () => {
+    const result = await db.update(Users).set({
+      credits: userDetail?.credits - 1
 
-    }).returning({id:Users.id});
+    }).returning({ id: Users.id });
 
-     if(result){
-      setUserDetail(prev=>({
+    if (result) {
+      setUserDetail(prev => ({
         ...prev,
-        credits: userDetail?.credits-1
+        credits: userDetail?.credits - 1
 
       }))
       return result[0].id
-     }
+    }
 
   }
   // const { getToken } = useAuth();
@@ -191,42 +192,59 @@ function CreateNew() {
   return (
     <>
       <div className="px-4">
+        {/* Navigation buttons */}
+        <div className="flex justify-between items-center mb-6 px-2">
+          <Link href="/dashboard">
+            <Button variant="outline" className="flex items-center gap-2 px-5 py-3 text-base sm:text-lg ">
+              <Home className="w-20 h-20" />
+              Dashboard
+            </Button>
+          </Link>
+          <Link href="/">
+            <Button variant="secondary" className="flex items-center gap-2 px-5 py-3 text-base sm:text-lg">
+              <Home className="w-20 h-2" />
+              Home
+            </Button>
+          </Link>
+        </div>
         <h2 className="font-bold text-2xl text-primary text-center mb-4">
           Experience the Magic of AI Remodeling
         </h2>
         <p className="text-center text-lg mb-6" style={{ color: "#8B4513" }}>
           Transform any room with a click. Select a space, choose a style, and watch as AI reimagines your environment.
         </p>
-  
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-4 ml-[15px]">
           <ImageSelection selectedImage={(value) => onHandleInputChange(value, "image")} />
           <div className="mt-4">
             <RoomType selectedRoomType={(value) => onHandleInputChange(value, "roomType")} />
             <DesignType selectedDesignType={(value) => onHandleInputChange(value, "designType")} />
             <AdditionalReq additionalRequirementInput={(value) => onHandleInputChange(value, "additionalReq")} />
-  
+
             <Button className="w-full mt-5" onClick={generateAiImage} disabled={loading}>
               {loading ? "Processing..." : "Generate"}
             </Button>
           </div>
         </div>
-  
+
         {uploadedImageUrl && <img src={uploadedImageUrl} alt="Uploaded" className="mt-4 rounded shadow-lg" />}
         {aiGeneratedImageUrl && <img src={aiGeneratedImageUrl} alt="AI Generated" className="mt-4 rounded shadow-lg" />}
         {errorMessage && <div className="text-red-500 mt-4">{errorMessage}</div>}
       </div>
-  
+
       <div>
         <CustomLoading loading={loading} />
-        <AiOutputDialog openDialog={openOutputDialog} 
-        closeDialog={()=>setOpenOutputDialog(false)}
-        orgImage={orgImage}
-        aiImage={aiOutputImage}
+        <AiOutputDialog openDialog={openOutputDialog}
+          closeDialog={() => setOpenOutputDialog(false)}
+          orgImage={orgImage}
+          aiImage={aiOutputImage}
         />
       </div>
+
+
     </>
   );
-  
+
 }
 
 export default CreateNew;

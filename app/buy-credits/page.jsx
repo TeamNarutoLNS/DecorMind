@@ -5,8 +5,10 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { motion } from "framer-motion";
 import { Users } from "@/config/schema";
 import { UserDetailContext } from "../_context/UserDetailContext";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { db } from "@/config/db";
+import Link from "next/link";
+import { Home } from "lucide-react";
 
 const credits = [
   { amount: 5, price: 80 },
@@ -19,12 +21,11 @@ const credits = [
 const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 console.log("PayPal Client ID (Buy Credits):", process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
 
-
 const BuyCredits = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const {userDetail, setUserDetail}= useContext(UserDetailContext);
-  const router=useRouter();
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -32,43 +33,36 @@ const BuyCredits = () => {
     }
   }, []);
 
-  // const onPaymentSuccess = async(details) => {
-  //   alert(`Transaction completed by ${details.payer.name.given_name}`);
-  //   console.log("Payment Details:", details);
-  //   const result = await db.update(Users)
-  //   .set({
-  //     credits:userDetail?.credits+selectedOption?.credits
-  //   }).returning({id:Users.id});
-
-  //  if (result){
-
-  //     router.push('/dashboard');
-  //  }
-
-  // };
-  const onPaymentSuccess = async(details) => {
-    alert(`Transaction completed by ${details.payer.name.given_name}`);
-    console.log("Payment Details:", details);
-  
-    const currentCredits = parseInt(userDetail?.credits) || 0;
-    const selectedCredits = parseInt(selectedOption?.amount) || 0;
-  
-    const result = await db.update(Users)
-      .set({
-        credits: currentCredits + selectedCredits
-      })
-      .returning({ id: Users.id });
-  
-    if (result) {
-      setUserDetail(prev=>({
-        ...prev,
-        credits: currentCredits + selectedCredits
-
-      }))
-      router.push('/dashboard');
+  const handleDashboardRedirect = () => {
+    if (userDetail) {
+      router.push("/dashboard");
+    } else {
+      router.push("/sign-up");
     }
   };
-  
+
+  const onPaymentSuccess = async (details) => {
+    alert(`Transaction completed by ${details.payer.name.given_name}`);
+    console.log("Payment Details:", details);
+
+    const currentCredits = parseInt(userDetail?.credits) || 0;
+    const selectedCredits = parseInt(selectedOption?.amount) || 0;
+
+    const result = await db
+      .update(Users)
+      .set({
+        credits: currentCredits + selectedCredits,
+      })
+      .returning({ id: Users.id });
+
+    if (result) {
+      setUserDetail((prev) => ({
+        ...prev,
+        credits: currentCredits + selectedCredits,
+      }));
+      router.push("/dashboard");
+    }
+  };
 
   return (
     <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID, currency: "USD" }}>
@@ -76,14 +70,19 @@ const BuyCredits = () => {
         <header className="flex items-center justify-between px-8 py-5 bg-gray-900 text-white shadow-lg rounded-b-lg">
           <h1 className="text-3xl font-bold">DECORMIND</h1>
           <nav>
-            <a href="#" className="bg-yellow-500 px-6 py-2 rounded-lg hover:bg-yellow-600 transition">DASHBOARD</a>
+            <button
+              className="bg-yellow-500 px-6 py-2 rounded-lg hover:bg-yellow-600 transition"
+              onClick={handleDashboardRedirect}
+            >
+              DASHBOARD
+            </button>
           </nav>
         </header>
 
         <main className="max-w-4xl mx-auto px-8 py-12 text-center">
           <h2 className="text-4xl font-bold text-gray-800">Buy More Credits</h2>
           <p className="text-lg text-gray-600 mt-3">Unlock endless possibilities with AI! Buy credits to create stunning designs.</p>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-10">
             {credits.map((credit) => (
               <motion.div
@@ -132,13 +131,19 @@ const BuyCredits = () => {
                       console.error("PayPal Checkout Error:", err);
                       alert("Something went wrong with your payment. Please try again.");
                     }}
-                    
                   />
                 </motion.div>
               </div>
             </motion.div>
           )}
         </main>
+
+              {/* Floating Home Button */}
+      <Link href="/" passHref>
+        <div className="fixed right-4 bottom-8 bg-gray-900 text-white p-3 rounded-full shadow-lg hover:bg-[#5f4339] transition duration-300 cursor-pointer z-50">
+          <Home className="w-10 h-10" />
+        </div>
+      </Link>
 
         <footer className="mt-16 py-6 bg-gray-900 text-white text-center rounded-t-lg">
           <p className="text-sm">© 2025 DECORMIND. All rights reserved.</p>
@@ -149,4 +154,3 @@ const BuyCredits = () => {
 };
 
 export default BuyCredits;
-

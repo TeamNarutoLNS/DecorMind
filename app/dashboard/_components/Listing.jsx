@@ -111,10 +111,6 @@
 // export default Listing;
 
 
-
-
-
-
 import React, { useEffect, useState } from 'react';
 import { useUser } from '@clerk/clerk-react'
 import Link from 'next/link';
