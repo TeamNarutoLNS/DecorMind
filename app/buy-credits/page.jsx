@@ -140,7 +140,7 @@ const BuyCredits = () => {
 
               {/* Floating Home Button */}
       <Link href="/" passHref>
-        <div className="fixed right-4 bottom-8 bg-gray-900 text-white p-3 rounded-full shadow-lg hover:bg-[#5f4339] transition duration-300 cursor-pointer z-50">
+        <div className="fixed right-4 bottom-8 bg-gray-900 text-white p-3 rounded-full shadow-lg hover:bg-gray-900 transition duration-300 cursor-pointer z-50">
           <Home className="w-10 h-10" />
         </div>
       </Link>
