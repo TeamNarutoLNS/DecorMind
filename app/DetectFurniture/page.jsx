@@ -45,8 +45,8 @@ const DetectFurniturePage = () => {
         setItems(
           data?.results?.results?.[0]?.entities?.[0]?.mapping
             ? Object.entries(data.results.results[0].entities[0].mapping).map(
-                ([label, count]) => ({ label, count })
-              )
+              ([label, count]) => ({ label, count })
+            )
             : []
         );
       } catch (err) {
@@ -88,7 +88,15 @@ const DetectFurniturePage = () => {
       {/* Header */}
       <header className="bg-[#f6e9dd] text-[#5C4431] shadow-sm py-4 px-4 sm:px-6 flex justify-between items-center">
         <h1 className="text-xl sm:text-2xl font-bold">DecorMind</h1>
+
+        {/* Dashboard Button */}
+        <Link href="/dashboard">
+          <button className="bg-[#5C4431] hover:bg-[#4a3628] text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+            Go to Dashboard
+          </button>
+        </Link>
       </header>
+
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-[#5C4431] mb-6 sm:mb-8">
@@ -189,8 +197,8 @@ const DetectFurniturePage = () => {
           </div>
         )}
       </main>
-            {/* Floating Home Button */}
-            <Link href="/" passHref>
+      {/* Floating Home Button */}
+      <Link href="/" passHref>
         <div className="fixed right-4 bottom-8 bg-[#8b6a55] text-white p-3 rounded-full shadow-lg hover:bg-[#5f4339] transition duration-300 cursor-pointer z-50">
           <Home className="w-5 h-5" />
         </div>
