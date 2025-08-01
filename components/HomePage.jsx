@@ -9,9 +9,9 @@ const HomePage = () => {
       {/* Main Content */}
       <main className="pt-20">
         <section className="text-center py-16 bg-gray-50">
-          <h1 className="text-4xl font-bold text-gray-800">Welcome to DecorMind</h1>
+          <h1 className="text-4xl font-bold text-gray-800">Welcome to StyleMatch</h1>
           <p className="text-gray-600 mt-4">
-            Transform your space with our AI-powered interior design tools.
+            Transform your room with our AI-powered interior design tools.
           </p>
           <div className="mt-8">
             <button className="bg-decor-accent text-white text-sm px-6 py-3 rounded-md hover:bg-decor-accent/90">

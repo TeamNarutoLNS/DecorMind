@@ -13,14 +13,14 @@ function Header() {
       {/* Left Section: Logo and Tagline */}
       <div className="flex items-center gap-4">
         <Image
-          src={"/Decormind_logo.png"}
+          src={"/roomdecor.jpg"}
           alt={"logo"}
           width={80}
           height={80}
           className="rounded-full shadow-md md:w-20 md:h-20"
         />
         <div>
-          <h1 className="text-lg sm:text-2xl font-bold text-white">Decormind</h1>
+          <h1 className="text-lg sm:text-2xl font-bold text-white">StyleMatch</h1>
           <p className="text-xs sm:text-sm text-white italic">
             Redefining spaces with AI
           </p>
