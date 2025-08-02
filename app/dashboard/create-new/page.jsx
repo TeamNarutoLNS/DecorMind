@@ -16,6 +16,7 @@ import { Users } from "@/config/schema";
 import { UserDetailContext } from "@/app/_context/UserDetailContext";
 import Link from "next/link";
 import { Home } from "lucide-react";
+import GenerateButton from "@/components/ui/generatebutton";
 
 function CreateNew() {
   const { user } = useUser();
@@ -93,29 +94,22 @@ function CreateNew() {
       setLoading(false);
     }
   };
+
   const generateAiImage = async () => {
-    setLoading(true);
-    const rawImageUrl = await saveImageToCloudinary();
-    const result = await axios.post(
-      "/api/redesign-room",
-      {
-        imageUrl: rawImageUrl,
-        roomType: formData?.roomType,
-        designType: formData?.designType,
-        additionalReq: formData?.additionalReq,
-        userEmail: user?.primaryEmailAddress?.emailAddress
-      });
-    console.log(result.data);
-    await updateUserCredits();
-    setAiOutputImage(result.data.result);
+  setLoading(true);
+
+  const rawImageUrl = await saveImageToCloudinary(); // keeps real upload
+
+  // Simulate delay like AI is processing
+  setTimeout(() => {
+    const fakeAIImage = "/ai-output/page1.png"; // Put your dummy output image
+    setOrgImage(rawImageUrl);
+    setAiOutputImage(fakeAIImage);
     setOpenOutputDialog(true);
-    await updateUserCredits();
     setLoading(false);
+  }, 2000); // 2 seconds fake delay
+};
 
-
-
-
-  }
   const updateUserCredits = async () => {
     const result = await db.update(Users).set({
       credits: userDetail?.credits - 1
@@ -221,9 +215,9 @@ function CreateNew() {
             <DesignType selectedDesignType={(value) => onHandleInputChange(value, "designType")} />
             <AdditionalReq additionalRequirementInput={(value) => onHandleInputChange(value, "additionalReq")} />
 
-            <Button className="w-full mt-5" onClick={generateAiImage} disabled={loading}>
+            <GenerateButton className="w-full mt-5" onClick={generateAiImage} disabled={loading}>
               {loading ? "Processing..." : "Generate"}
-            </Button>
+            </GenerateButton>
           </div>
         </div>
 

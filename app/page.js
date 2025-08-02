@@ -2,28 +2,56 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation'
+
 import FeaturesSection from "@/components/ui/FeaturesSection";
 import { useUser } from "@clerk/nextjs";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import HeroSection from "@/components/ui/HeroSection";
 import { Check } from "lucide-react";
+import { useState } from "react";
+import GenerateButton from "@/components/ui/GenerateButton";
 
 export default function Home() {
   const router = useRouter();
   const { isSignedIn } = useUser();
 
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showGeneratedImage, setShowGeneratedImage] = useState(false);
+
   const steps = [
-    { step: "01", title: "Share Your Space", description: "Upload photos & room dimensions for AI-powered design.", image: "https://images.unsplash.com/photo-1581439645268-ea7bbe6bd091?q=80&w=2012&auto=format&fit=crop" },
-    { step: "02", title: "AI Design Generation", description: "Our AI analyzes your inputs and generates multiple design options.", image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=2080&auto=format&fit=crop" },
-    { step: "03", title: "Customize & Purchase", description: "Refine your design & purchase recommended furniture instantly.", image: "https://images.unsplash.com/photo-1575909812264-6902b55846ad?q=80&w=2070&auto=format&fit=crop" },
+    {
+      step: "01",
+      title: "Share Your Space",
+      description: "Upload photos & room dimensions for AI-powered design.",
+      image: "/ai-output/page3.png",
+    },
+    {
+      step: "02",
+      title: "AI Design Generation",
+      description: "Our AI analyzes your inputs and generates multiple design options.",
+      image: "/ai-output/page3.png",
+    },
+    {
+      step: "03",
+      title: "Customize & Purchase",
+      description: "Refine your design & purchase recommended furniture instantly.",
+      image: "/ai-output/page3.png",
+    },
   ];
 
   const features = ["Free design consultations", "Access to exclusive products", "Custom AI recommendations"];
 
   const handleGetStarted = () => {
-    isSignedIn ? router.push("/dashboard") : router.push("/sign-in");
+    setIsGenerating(true);
+    setShowGeneratedImage(false);
+
+    setTimeout(() => {
+      setIsGenerating(false);
+      setShowGeneratedImage(true);
+    }, 2000);
   };
 
   return (
@@ -87,13 +115,36 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <button onClick={handleGetStarted} className="bg-[#d4a373] text-[#5f4339] hover:bg-[#d4a373]/90 w-full sm:w-auto py-3 px-6 rounded-lg font-medium">Get Started Free</button>
+            <GenerateButton onClick={handleGetStarted} className="bg-[#d4a373] text-[#5f4339] hover:bg-[#d4a373]/90 w-full sm:w-auto py-3 px-6 rounded-lg font-medium">Get Started Free</GenerateButton>
             <Link href="/Contact">
-              <button className="border-[#f5ebe0] text-[#f5ebe0] hover:bg-[#f5ebe0]/10 w-full sm:w-auto py-3 px-6 rounded-lg font-medium border">Contact Sales</button>
+              <GenerateButton className="border-[#f5ebe0] text-[#f5ebe0] hover:bg-[#f5ebe0]/10 w-full sm:w-auto py-3 px-6 rounded-lg font-medium border">Contact Sales</GenerateButton>
             </Link>
           </div>
         </div>
       </section>
+
+      {isGenerating && (
+        <div className="py-10 text-center text-lg text-decor-primary">
+          Generating your dream room design...
+        </div>
+      )}
+
+      {showGeneratedImage && (
+        <div className="max-w-4xl mx-auto py-12 px-4">
+          <h3 className="text-2xl font-semibold text-center text-decor-primary mb-6">
+            Here's your AI-Generated Room ✨
+          </h3>
+          <div className="rounded-lg shadow-lg overflow-hidden">
+            <Image
+              src="/ai-output/livingroom-modern.png"
+              alt="Generated Room"
+              width={800}
+              height={500}
+              className="w-full h-auto object-cover"
+            />
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
